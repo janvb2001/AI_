@@ -6,7 +6,7 @@
     },
     "mounts": [
         // Bind mount data here if necessary e.g.
-        //"source=<your-external-data-directory>,target=${containerWorkspaceFolder}/data,type=bind"
+        "source=/home/janvb2001/datasets_AI,target=${containerWorkspaceFolder}/data,type=bind"
     ],
     "features": {},
     "customizations": {
