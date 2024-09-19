@@ -41,7 +41,18 @@ class PolImgDataset(Dataset):
 
         if self.augment:
             # TODO: Implement data augmentation
-            pass
+            flip_hor = torch.rand(1).item() > 0.5
+            flip_ver = torch.rand(1).item() > 0.5
+
+            if flip_hor:
+                maps = torch.flip(maps, [2])
+                vector[0] = -vector[0]
+                angles = (360 - angles) % 360
+
+            if flip_ver:
+                maps = torch.flip(maps, [1])
+                vector[1] = -vector[1]
+                angles = (180 - angles) % 360
 
         return maps, vector, angles
 
