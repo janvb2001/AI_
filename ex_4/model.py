@@ -69,7 +69,27 @@ class DecoderResNetVAE(nn.Module):
         # https://github.com/vdumoulin/conv_arithmetic/blob/master/README.md is a good resource
         # for understanding how to calculate the output shape of the transposed convolution
         # Reminder: Add a sigmoid layer at the end to ensure the output is between 0 and 1
-        self.upsampling = nn.Identity()
+        self.upsampling = nn.Sequential(
+            (
+                nn.ConvTranspose2d(
+                    128, 128, kernel_size=3, stride=2, padding=1, output_padding=1
+                )
+                if extra_layer
+                else nn.Identity()
+            ),
+            nn.ConvTranspose2d(
+                128, 128, kernel_size=3, stride=2, padding=1, output_padding=1
+            ),
+            nn.ReLU(),
+            nn.ConvTranspose2d(
+                128, 64, kernel_size=4, stride=2, padding=1, output_padding=1
+            ),
+            nn.ReLU(),
+            nn.ConvTranspose2d(
+                64, channel_out, kernel_size=4, stride=2, padding=2, output_padding=0
+            ),
+            nn.Sigmoid(),
+        )
 
     def forward(self, z):
         x = self.projection_layer(z)

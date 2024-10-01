@@ -19,7 +19,11 @@ class BaseAE(nn.Module):
     def loss_fn(self, x, mu, recon_x):
         # TODO: Implement the loss function (reconstruction loss)
 
-        return torch.tensor(0.)
+        recon_loss = nn.functional.mse_loss(recon_x, x, reduction="sum")
+        # kl_loss = 0.5 * torch.sum(mu.pow(2))
+
+        # return recon_loss + kl_loss
+        return recon_loss
 
     def reconstruct(self, x):
         return self(x)["recon_x"]
@@ -72,9 +76,14 @@ class BetaVAE(BaseAE):
             eps: torch.Tensor, the noise used for sampling
         """
         # TODO: Reparameterization trick
-        return torch.tensor(0.), torch.tensor(0.)
+
+        eps = torch.randn_like(std)
+        z = mu + std * eps
+        return z, eps
 
     def loss_fn(self, x, mu, log_var, recon_x):
         # TODO: Implement the loss function (reconstruction loss + beta * KL divergence)
-        return torch.tensor(0.)
+        recon_loss = nn.functional.mse_loss(recon_x, x, reduction="sum")
+        kl_loss = 0.5 * torch.sum(log_var.exp() + mu.pow(2) - 1 - log_var)
 
+        return recon_loss + self.beta * kl_loss

@@ -19,5 +19,5 @@ val_loader:
 defaults:
   - _self_
   - optional dataset: mnist
-  - optional arch: ae # ae, vae
+  - optional arch: vae # ae, vae
   - model: ${arch}_${dataset}
