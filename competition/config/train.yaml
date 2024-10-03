@@ -1,0 +1,36 @@
+max_epochs: 10
+
+train_loader:
+  _target_: torch.utils.data.DataLoader
+  _partial_: true
+  batch_size: 64
+  shuffle: true
+  num_workers: 0
+
+val_loader:
+  _target_: torch.utils.data.DataLoader
+  _partial_: true
+  batch_size: 64
+  shuffle: false
+  num_workers: 0
+
+dataset:
+  _target_: dataset.droneDataSet
+  # dataset_path: /workspaces/AE4353-Y24/competition/data
+  dataset_path: /workspaces/AE4353-Y24/data/drone_gate_data/autonomous_flight-01a-ellipse.h5
+  h5: true
+  prefix: ""
+  augment: true
+
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 1e-4
+
+defaults:
+  - _self_
+  - model/backbone: convolution1
+  - model/representation: raw
+  - loss: mse
+  - optional lr@optimizer: ${model/backbone}_${model/representation}_${loss}

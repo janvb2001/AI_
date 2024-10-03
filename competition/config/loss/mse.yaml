@@ -1,0 +1,2 @@
+_target_: competition.loss.mse
+_partial_: true
