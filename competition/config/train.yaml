@@ -23,7 +23,7 @@ dataset:
   augment: false
 
 model:
- _target_: model.simplestBackbone
+ _target_: working.model.simplestBackbone
 
 optimizer:
   _target_: torch.optim.Adam
